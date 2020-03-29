@@ -1,0 +1,8 @@
+<h1>Ana Sayfa</h1>
+<p>Senin Rolun: <strong>{{currentUser.role}}</strong></p>
+<p>Bu sayfaya kimliği doğrulanmış her kullanıcı erişebilir.</p>
+<div>
+    <ul>
+        <li *ngIf= "userFromApi">{{userFromApi.firstname}} {{userFromApi.lastname}}</li>
+    </ul>
+</div>
