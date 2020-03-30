@@ -13,7 +13,7 @@ export class AdminComponent implements OnInit{
     constructor(private userService: UserService){}
 
     ngOnInit(){
-        this.userService.getAll().pipe(first()).subscribe(users => {
+        this.userService.getAllAdmin().pipe(first()).subscribe(users => {
             this.users = users;
         });
     }

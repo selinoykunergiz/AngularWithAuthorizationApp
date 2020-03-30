@@ -13,7 +13,8 @@ export class GeneralDirectorComponent implements OnInit{
     constructor(private userService: UserService){}
 
     ngOnInit(){
-        this.userService.getAll().pipe(first()).subscribe(users => {
+        debugger;
+        this.userService.getAllGeneralDirector().pipe(first()).subscribe(users => {
             this.users = users;
         });
     }

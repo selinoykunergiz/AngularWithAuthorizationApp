@@ -4,7 +4,7 @@
       <a class="nav-item nav-link" routerLink="/">Home</a>
       <a class="nav-item nav-link" routerLink="/admin" *ngIf="isAdmin">Admin</a>
       <a class="nav-item nav-link" routerLink="/systemmanager" *ngIf="isSystemManager">System Manager</a>
-      <a class="nav-item nav-link" routerLink="/generaldirector" *ngIf="isGeneralDirector">General Director</a>
+      <a class="nav-item nav-link" routerLink="/generaldirector" *ngIf="(isSystemManager) || (isGeneralDirector)">General Director</a>
       <a class="nav-item nav-link" (click)="logout()">Logout</a>
 
   </div>
@@ -20,3 +20,4 @@
       </div>
   </div>
 </div>
+

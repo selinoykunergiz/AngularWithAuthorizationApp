@@ -5,15 +5,17 @@ import { delay, mergeMap, materialize, dematerialize } from 'rxjs/operators';
 import { Role } from '../_models/role';
 import { User } from '../_models/user';
 
+
 @Injectable()
 export class FakeBackendInterceptor implements HttpInterceptor {
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         const users: User[] = [
             { id: 1, username: 'admin', password: 'admin', firstname: 'Admin', lastname: 'User', role: Role.Admin },
-            { id: 2, username: 'user', password: 'user', firstname: 'User', lastname: 'User', role: Role.User },
+            { id: 2, username: 'user', password: 'user', firstname: 'Normal', lastname: 'User', role: Role.User },
             { id: 3, username: 'systemmanager', password: 'systemmanager', firstname: 'SystemManager', lastname: 'SystemManager', role: Role.SystemManager },
             { id: 4, username: 'generaldirector', password: 'generaldirector', firstname: 'GeneralDirector', lastname: 'GeneralDirector', role: Role.GeneralDirector }
         ];
+
         const authHeader = request.headers.get('Authorization');
         const isLoggedIn = authHeader && authHeader.startsWith('Bearer fake-jwt-token');
         const roleString = isLoggedIn && authHeader.split('.')[1];
@@ -51,22 +53,21 @@ export class FakeBackendInterceptor implements HttpInterceptor {
                 if (role !== Role.Admin) return unauthorised();
                 return ok(users);
             }
-
+            if (request.url.endsWith('/users/GeneralDirector') && request.method === 'GET') {
+                if (role !== Role.GeneralDirector && role !== Role.SystemManager) return unauthorised();
+                return ok(users);
+            }
             if (request.url.endsWith('/users/SystemManager') && request.method === 'GET') {
                 if (role !== Role.SystemManager) return unauthorised();
                 return ok(users);
             }
 
-            if (request.url.endsWith('/users/GeneralDirector') && request.method === 'GET') {
-                if (role !== Role.GeneralDirector) return unauthorised();
-                return ok(users);
-            }
-
             return next.handle(request);
         }))
-            .pipe(materialize())
-            .pipe(delay(500))
-            .pipe(dematerialize());
+        .pipe(materialize())
+        .pipe(delay(500))
+        .pipe(dematerialize());
+
 
         function ok(body) {
             return of(new HttpResponse({ status: 200, body }));

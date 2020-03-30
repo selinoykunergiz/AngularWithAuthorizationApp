@@ -6,8 +6,19 @@ import { User } from '../_models/user';
 export class UserService {
     constructor(private http: HttpClient){}
 
+    getAllAdmin(){
+        return this.http.get<User[]>(`/users/Admin`);
+    }
+
+    getAllGeneralDirector(){
+        return this.http.get<User[]>(`/users/GeneralDirector`);
+    }
+    
+    getAllSystemManager(){
+        return this.http.get<User[]>(`/users/SystemManager`);
+    }
+
     getAll(){
-        debugger;
         return this.http.get<User[]>(`/users`);
     }
 
